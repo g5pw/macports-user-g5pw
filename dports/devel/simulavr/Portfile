@@ -1,0 +1,42 @@
+# $Id$
+
+PortSystem		1.0
+
+name			simulavr
+version			1.0.0
+maintainers		g5pw
+
+categories		devel
+license			GPL-2
+description		The SimulAVR program is a simulator for the Atmel AVR family of microcontrollers.
+long_description	${description} (ATtiny and ATmega) SimulAVR can be used either standalone or as a remote target for avr-gdb.\
+			There is a python- and TCL interface. When used in gdbserver mode, the simulator is used as a back-end so that\
+			avr-gdb can be used as a source level debugger for AVR programs. \
+			SimulAVR started out as a C based project written by Theodore Roth in 2001. Klaus Rudolph started then in 2004 to\
+			rewrite the hardware simulation part in C++. Only the instruction decoder and the avr-gdb interface are mostly copied\
+			from the original simulavr sources. This C++ based version was known as simulavrxx until it became feature compatibile\
+			with the old simulavr code, then it renamed back to simulavr.
+
+platforms		darwin
+
+homepage		http://www.nongnu.org/simulavr/
+master_sites		http://download.savannah.nongnu.org/releases/simulavr/
+
+checksums		rmd160  0e9eb32f398943449b564e919765348c32f4c600 \
+			sha256  39d93faa3eeae2bee15f682dd6a48fb4d4366addd12a2abebb04c99f87809be7
+configure.args-append	--with-bfd=/opt/local/x86_64-apple-darwin11/avr/
+variant python description {Add python support} {
+	configure.args-append	--enable-python
+}
+
+variant tcl description {Enable TCL support} {
+	configure.args-append	--with-tclconfig=/opt/local/lib/tcl8.4
+}
+
+variant doc description {Include documentation} {
+	configure.args-append	--enable-doxygen-doc
+}
+
+variant verilog description {Add verilog support} {
+	configure.args-append	--enable-verilog
+}
