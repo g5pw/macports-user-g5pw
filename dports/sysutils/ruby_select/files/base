@@ -1,0 +1,13 @@
+bin/erb
+bin/irb
+bin/rdoc
+bin/ri
+bin/ruby
+bin/testrb
+lib/libruby-static.a
+lib/libruby.dylib
+lib/ruby
+lib/ruby/site_ruby
+lib/ruby/vendor_ruby
+share/man/man1/ruby.1.gz
+share/ri
