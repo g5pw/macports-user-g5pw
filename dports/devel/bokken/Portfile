@@ -1,0 +1,51 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+# $Id   $
+
+PortSystem          1.0
+PortGroup           python27 1.0
+
+name                bokken
+version             1.5
+categories          devel
+platforms           darwin
+license             GPL-3
+maintainers         gmail.com:a2piratesoft pixilla openmaintainer
+description         Bokken is a GUI for the Pyew and Radare projects.
+long_description    ${description} It offers almost all the same features that Pyew has and and \
+                    some of the Radares ones. It is intended to be a basic disassembler, mainly, \
+                    to analyze malware and vulnerabilities.
+homepage            http://inguma.eu/projects/bokken
+master_sites        http://inguma.eu/attachments/download/188/
+
+checksums           rmd160  4efed8f5d186ee5d957198fc1973b322b2000a32 \
+                    sha256  7dfb24b4283494db971d5a907dd52bb55455d4b62bfd907c50d125027ff80826
+
+worksrcdir          ${name}
+
+depends_build       port:pkgconfig
+
+depends_lib         port:vala \
+                    port:py27-pygtksourceview
+
+depends_run         port:swig
+
+use_configure       no
+
+use_parallel_build  no
+
+variant universal {}
+
+post-patch {
+    reinplace "s|PYTHON_EXECUTABLE=\"python\"|PYTHON_EXECUTABLE=\"${python.bin}\"|" \
+        ${worksrcpath}/bokken
+    reinplace "s|PYTHON_VER=`python|PYTHON_VER=`${python.bin}|" \
+        ${worksrcpath}/bokken
+    fs-traverse file ${worksrcpath} {
+        if {[file isfile ${file}]} {
+            reinplace "s|#!/usr/bin/python|#!${python.bin}|" ${file}
+        }
+    }
+}
+
+livecheck.url       http://inguma.eu/projects/bokken/files
+livecheck.regex     ">${name}-((?!\${extract.suffix}).*)${extract.suffix}<"
