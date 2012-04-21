@@ -3,17 +3,17 @@
 
 PortSystem          1.0
 
-name		        radare2-bindings
+name                radare2-bindings
 set name_file       r2-bindings
-version		        0.9
-categories	        devel
+version             0.9
+categories          devel
 platforms           darwin
 license             GPL-3
-maintainers	        g5pw pixilla openmaintainer
-description	        Opensource tools to disasm, debug, analyze and manipulate binary files. Bindings for various languages.
+maintainers         g5pw pixilla openmaintainer
+description         Opensource tools to disasm, debug, analyze and manipulate binary files. Bindings for various languages.
 long_description    ${description}
-homepage	        http://radare.org
-master_sites	    http://radare.org/get/
+homepage            http://radare.org
+master_sites        ${homepage}/get/
 
 distname            ${name_file}-${version}
 
@@ -48,13 +48,13 @@ variant lua description {Include Lua binding} {
 variant perl5 description {Include perl 5 bindings} {
     bindings.disable-delete perl
     bindings.enable-append perl
-	depends_lib-append path:bin/perl:perl5 port:swig-perl
+    depends_lib-append path:bin/perl:perl5 port:swig-perl
 }
 
 variant php5 description {Include php 5 bindings} {
     bindings.disable-delete php5
     bindings.enable-append php5
-	depends_lib-append path:bin/php:php5 port:swig-php5
+    depends_lib-append path:bin/php:php5 port:swig-php5
 }
 
 
@@ -62,11 +62,11 @@ variant python27 description {Include python 2.7 bindings} {
     bindings.disable-delete python
     bindings.enable-append python
     build.env-append "PYTHON_CONFIG=python2.7-config"
-	depends_lib-append port:python27 port:swig-python
+    depends_lib-append port:python27 port:swig-python
 }
 
 variant ruby description {Include ruby bindings} {
     bindings.disable-delete ruby
     bindings.enable-append ruby
-	depends_lib-append port:ruby port:swig-ruby
+    depends_lib-append port:ruby port:swig-ruby
 }
