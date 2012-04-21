@@ -70,3 +70,7 @@ variant ruby description {Include ruby bindings} {
     bindings.enable-append ruby
     depends_lib-append port:ruby port:swig-ruby
 }
+
+livecheck.type		regex
+livecheck.url		${homepage}/y/?p=download
+livecheck.regex		"${name_file}-(\\d\\.\\d)"
