@@ -1,3 +1,4 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=portfile:et:sw=4:ts=4:sts=4
 # $Id$
 
 PortSystem		1.0
@@ -20,17 +21,19 @@ long_description	${description} (ATtiny and ATmega) SimulAVR can be used either 
 platforms		darwin
 
 homepage		http://www.nongnu.org/simulavr/
-master_sites		http://download.savannah.nongnu.org/releases/simulavr/
+master_sites	http://download.savannah.nongnu.org/releases/simulavr/
 
 checksums		rmd160  0e9eb32f398943449b564e919765348c32f4c600 \
-			sha256  39d93faa3eeae2bee15f682dd6a48fb4d4366addd12a2abebb04c99f87809be7
-configure.args-append	--with-bfd=/opt/local/x86_64-apple-darwin11/avr/
+                sha256  39d93faa3eeae2bee15f682dd6a48fb4d4366addd12a2abebb04c99f87809be7
+
+configure.args-append	--with-bfd=${prefix}/x86_64-apple-darwin11/avr/
+
 variant python description {Add python support} {
 	configure.args-append	--enable-python
 }
 
 variant tcl description {Enable TCL support} {
-	configure.args-append	--with-tclconfig=/opt/local/lib/tcl8.4
+	configure.args-append	--with-tclconfig=${prefix}/lib/tcl8.4
 }
 
 variant doc description {Include documentation} {
@@ -40,3 +43,6 @@ variant doc description {Include documentation} {
 variant verilog description {Add verilog support} {
 	configure.args-append	--enable-verilog
 }
+
+livecheck.type      regex
+livecheck.regex     "${name}-(\[0-9\\.\]*)"
