@@ -32,7 +32,7 @@ build.args          CC="${configure.cc} [get_canonical_archflags]"
 
 post-destroot {
     # Fix link lib paths
-    system -W ${filespath} "sh change_install_names ${destroot}"
+    system -W ${filespath} "sh change_install_names.sh ${destroot}"
 }
 
 livecheck.type      regex
