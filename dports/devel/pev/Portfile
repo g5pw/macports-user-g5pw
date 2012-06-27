@@ -16,7 +16,7 @@ platforms           darwin
 homepage            http://sourceforge.net/projects/pev/
 
 
-master_sites        sourceforge
+master_sites        sourceforge:project/pev/pev-${version}
 
 
 checksums           rmd160  d1dbcab5e52a7f2661eb042cc4a7df506364fee7 \
@@ -27,7 +27,9 @@ patchfiles			lib_libpe_Makefile.patch \
 
 use_configure       no
 
-build.args-append   CC=${configure.cc} \
+variant universal {}
+
+build.args-append   CC="${configure.cc} [get_canonical_archflags]" \
                     CXX=${configure.cxx} \
                     CPP=${configure.cpp} \
                     PREFIX=${prefix}
