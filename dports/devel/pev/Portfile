@@ -30,8 +30,6 @@ use_configure       no
 variant universal {}
 
 build.args-append   CC="${configure.cc} [get_canonical_archflags]" \
-                    CXX=${configure.cxx} \
-                    CPP=${configure.cpp} \
                     PREFIX=${prefix}
 
 destroot.args-append \
