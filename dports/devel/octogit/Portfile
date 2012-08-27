@@ -5,7 +5,7 @@ PortSystem          1.0
 PortGroup           github 1.0
 PortGroup           python 1.0
 
-github.setup        myusuf3 octogit 0.3.1 v
+github.setup        myusuf3 octogit 0.3.3 v
 
 python.default_version  27
 categories          devel
@@ -18,8 +18,8 @@ long_description    A free, open source solution for creating github repositorie
 
 platforms           darwin
 
-checksums           rmd160  40486470c2ad35da17fba41aa29b260f39a3320b \
-                    sha256  b61f3c19a07feaf5c7db67788a7ba242bb389bf51037ed9929388b28540a5e29
+checksums           rmd160  058cce4b0815ad6cad6db4832acde6c936ea141a \
+                    sha256  888d09e46a5d7118b23c276d76a91a68fa26695afeca4a3aed072880f60151c8
 
 depends_lib         port:py${python.version}-virtualenv \
                     port:py${python.version}-clint

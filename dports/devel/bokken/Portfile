@@ -5,7 +5,7 @@ PortSystem          1.0
 PortGroup           python27 1.0
 
 name                bokken
-version             1.5
+version             1.6
 categories          devel
 platforms           darwin
 license             GPL-3
@@ -15,7 +15,7 @@ long_description    ${description} It offers almost all the same features that P
                     some of the Radares ones. It is intended to be a basic disassembler, mainly, \
                     to analyze malware and vulnerabilities.
 homepage            http://inguma.eu/projects/bokken
-master_sites        http://inguma.eu/attachments/download/188/
+master_sites        http://inguma.eu/attachments/download/197/
 
 checksums           rmd160  4efed8f5d186ee5d957198fc1973b322b2000a32 \
                     sha256  7dfb24b4283494db971d5a907dd52bb55455d4b62bfd907c50d125027ff80826
