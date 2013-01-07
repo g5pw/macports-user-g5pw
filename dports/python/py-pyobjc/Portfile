@@ -2,16 +2,19 @@
 # $Id$
 
 PortSystem 1.0
-PortGroup python24 1.0
+PortGroup python 1.0
 
 name                py-pyobjc
+replaced_by         py-pyobjc-core
 version             1.4
+revision            1
+python.versions     25 26 27 32
 categories          python devel
 license             MIT
 maintainers         nomaintainer
 platforms           darwin
 description         bidirectional bridge between python and Objective C
-long_description	The PyObjC project aims to provide a bridge between \
+long_description    The PyObjC project aims to provide a bridge between \
                     the Python and Objective-C programming languages. The \
                     bridge is intended to be fully bidirectional, allowing \
                     the Python programmer to take full advantage of the \
@@ -20,22 +23,11 @@ long_description	The PyObjC project aims to provide a bridge between \
                     Python based functionality.
 
 homepage            http://pyobjc.sourceforge.net/
-master_sites        http://pyobjc.sourceforge.net/software/
-distname            pyobjc-${version}
-checksums           sha1 6f83b13b78e19f390709eaedf3004c81d983dc5d
+distfiles
 
-if {${os.major} > 8} {
-    pre-fetch {
-        return -code error "PyObjC 1.4 is for Mac OS X 10.4 and lower. On 10.5, use py-pyobjc2 instead."
-    }
+pre-configure {
+    ui_error "${name} has been renamed to ${replaced_by}. Please install ${replaced_by} instead."
+    return -code error "obsolete port"
 }
 
-post-destroot {
-    xinstall -m 644 -W ${worksrcpath} HISTORIC.txt Install.html Install.txt \
-            License.txt NEWS.html NEWS.txt README.txt ReadMe.html \
-            ${destroot}${prefix}/share/doc/${name}
-    file copy ${worksrcpath}/Doc ${destroot}${prefix}/share/doc/${name}/html
-    file delete ${destroot}${prefix}/share/doc/${name}/examples
-    file copy ${worksrcpath}/Examples \
-            ${destroot}${prefix}/share/doc/${name}/examples
-}
+livecheck.type      none
