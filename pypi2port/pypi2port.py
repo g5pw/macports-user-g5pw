@@ -115,8 +115,8 @@ def fetch(pkg_name, dict):
         print('Aborting due to inconsistency on checksums\n')
         try:
             os.remove(file_name)
-        except OSError, e:
-            print "Error: %s - %s." % (e.filename, e.strerror)
+        except OSError as e:
+            print("Error: %s - %s." % (e.filename, e.strerror))
         return False
 
 
