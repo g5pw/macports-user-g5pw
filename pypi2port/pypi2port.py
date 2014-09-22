@@ -193,11 +193,7 @@ def create_diff(old_file, new_file, diff_file):
 #    b = open(new_file).readlines()
     diff_string = difflib.unified_diff(a, b, "Portfile.orig", "Portfile")
     with open(diff_file, 'w') as d:
-        try:
-            while 1:
-                d.write(diff_string.next())
-        except:
-            pass
+        d.writelines(diff_string)
 
 
 def search_port(name):
