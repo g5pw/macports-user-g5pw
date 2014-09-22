@@ -14,7 +14,7 @@ import os
 import urllib2
 import hashlib
 import zipfile
-from progressbar import *
+import progressbar as pb
 try:
     import xmlrpclib
 except ImportError:
@@ -26,8 +26,6 @@ import re
 import difflib
 import subprocess
 import requests
-import shlex
-import getpass
 
 client = xmlrpclib.ServerProxy('http://pypi.python.org/pypi')
 
@@ -92,10 +90,10 @@ def fetch(pkg_name, dict):
         meta = u.info()
         file_size = int(meta.getheaders("Content-Length")[0])
 
-        widgets = ['Fetching: ', Percentage(), ' ',
-                   Bar(marker=RotatingMarker(), left='[', right=']'),
-                   ' ', ETA(), ' ', FileTransferSpeed()]
-        pbar = ProgressBar(widgets=widgets, maxval=int(file_size))
+        widgets = ['Fetching: ', pb.Percentage(), ' ',
+                   pb.Bar(marker=pb.RotatingMarker(), left='[', right=']'),
+                   ' ', pb.ETA(), ' ', pb.FileTransferSpeed()]
+        pbar = pb.ProgressBar(widgets=widgets, maxval=int(file_size))
         pbar.start()
 
         file_size_dl = 0
@@ -137,9 +135,9 @@ def fetch(pkg_name, dict):
 def fetch_url(pkg_name, pkg_version, checksum=False, deps=False):
     values = client.release_urls(pkg_name, pkg_version)
     if checksum:
-#        print values
+        # print values
         for value in values:
-            if value['filename'].split('.')[-1] == 'gz' or value['filename'].split('.')[-1] == 'zip':
+            if value['filename'].split('.')[-1] in ['gz', 'zip']:
                 return fetch(pkg_name, value)
     else:
         for value in values:
@@ -156,7 +154,7 @@ def dependencies(pkg_name, pkg_version, deps=False):
         return
     values = client.release_urls(pkg_name, pkg_version)
     for value in values:
-        if not(value['filename'].split('.')[-1] == 'gz' or value['filename'].split('.')[-1] == 'zip'):
+        if value['filename'].split('.')[-1] in ['gz', 'zip']:
             fetch(pkg_name, value)
     try:
         with open('./sources/python/py-'
@@ -170,7 +168,7 @@ def dependencies(pkg_name, pkg_version, deps=False):
                               ignore_errors=True)
                 items = os.listdir('./sources/python/py-' + pkg_name)
                 for item in items[:]:
-                    if not(item.split('.')[-1] == 'gz' or item.split('.')[-1] == 'zip'):
+                    if item.split('.')[-1] not in ['gz', 'zip']:
                         os.remove('./sources/python/py-'
                                   + pkg_name + '/' + item)
                         items.remove(item)
@@ -186,7 +184,7 @@ def dependencies(pkg_name, pkg_version, deps=False):
                               ignore_errors=True)
                 items = os.listdir('./sources/python/py-'+pkg_name)
                 for item in items[:]:
-                    if not(item.split('.')[-1] == 'gz' or item.split('.')[-1] == 'zip'):
+                    if item.split('.')[-1] not in ['gz', 'zip']:
                         os.remove('./sources/python/py-'+pkg_name+'/'+item)
                         items.remove(item)
                 if not items:
@@ -225,7 +223,7 @@ def search_port(name):
         existing_portfile = \
             subprocess.check_output(command, stderr=subprocess.STDOUT).strip()
         return existing_portfile
-    except Exception, e:
+    except Exception:
         return False
 
 
@@ -259,7 +257,7 @@ def checksums(pkg_name, pkg_version):
             try:
                 if flag:
                     os.rmdir(dir)
-            except OSError as ex:
+            except OSError:
                 pass
             return checksums
         except:
@@ -275,7 +273,7 @@ def search_distfile(name, version):
         url = client.release_urls(name, version)[0]['url']
         r = requests.get(url, verify=False)
         if not r.status_code == 200:
-            raise Error('No distfile')
+            raise Exception('No distfile')
     except:
         print "No distfile found"
         print "Please set a DISTFILE env var before generating the portfile"
@@ -340,7 +338,7 @@ def port_fetch(name, portv='27'):
         command = "sudo port -t fetch dports/python/py-" + \
                   name + " subport=py" + portv + "-" + name
         command = command.split()
-        phase_output = subprocess.check_call(command, stderr=subprocess.STDOUT)
+        subprocess.check_call(command, stderr=subprocess.STDOUT)
         return True
     except:
         return False
@@ -354,7 +352,7 @@ def port_checksum(name, portv='27'):
         command = "sudo port -t checksum dports/python/py-" + \
                   name + " subport=py" + portv + "-" + name
         command = command.split()
-        phase_output = subprocess.check_call(command, stderr=subprocess.STDOUT)
+        subprocess.check_call(command, stderr=subprocess.STDOUT)
         return True
     except:
         return False
@@ -368,7 +366,7 @@ def port_extract(name, portv='27'):
         command = "sudo port -t extract dports/python/py-" + \
                   name + " subport=py" + portv + "-" + name
         command = command.split()
-        phase_output = subprocess.check_call(command, stderr=subprocess.STDOUT)
+        subprocess.check_call(command, stderr=subprocess.STDOUT)
         return True
     except:
         return False
@@ -382,7 +380,7 @@ def port_patch(name, portv='27'):
         command = "sudo port -t patch dports/python/py-" + \
                   name + " subport=py" + portv + "-" + name
         command = command.split()
-        phase_output = subprocess.check_call(command, stderr=subprocess.STDOUT)
+        subprocess.check_call(command, stderr=subprocess.STDOUT)
         return True
     except:
         return False
@@ -396,7 +394,7 @@ def port_configure(name, portv='27'):
         command = "sudo port -t configure dports/python/py-" + \
                   name + " subport=py" + portv + "-" + name
         command = command.split()
-        phase_output = subprocess.check_call(command, stderr=subprocess.STDOUT)
+        subprocess.check_call(command, stderr=subprocess.STDOUT)
         return True
     except:
         return False
@@ -410,7 +408,7 @@ def port_build(name, portv='27'):
         command = "sudo port -t build dports/python/py-" + \
                   name + " subport=py" + portv + "-" + name
         command = command.split()
-        phase_output = subprocess.check_call(command, stderr=subprocess.STDOUT)
+        subprocess.check_call(command, stderr=subprocess.STDOUT)
         return True
     except:
         return False
@@ -424,7 +422,7 @@ def port_destroot(name, portv='27'):
         command = "sudo port -t destroot dports/python/py-" + \
                   name + " subport=py" + portv + "-" + name
         command = command.split()
-        phase_output = subprocess.check_call(command, stderr=subprocess.STDOUT)
+        subprocess.check_call(command, stderr=subprocess.STDOUT)
         return True
     except:
         return False
@@ -438,7 +436,7 @@ def port_clean(name, portv='27'):
         command = "sudo port -t clean dports/python/py-" + \
                   name + " subport=py" + portv + "-" + name
         command = command.split()
-        phase_output = subprocess.check_call(command, stderr=subprocess.STDOUT)
+        subprocess.check_call(command, stderr=subprocess.STDOUT)
         return True
     except:
         return False
@@ -499,7 +497,7 @@ def create_portfile(dict, file_name, dict2):
                         file.write("{0} \\\n".format(sum_line))
         else:
             file.write('description         None\n\n')
-        description = dict['description']
+#        description = dict['description']
 #        if description:
 #            description = description.encode('utf-8')
 #            description = filter(lambda x: x in string.printable, description)
@@ -541,8 +539,8 @@ def create_portfile(dict, file_name, dict2):
 #        sys.exit(1)
 
         try:
-#                print dict2
-#                print dict2['url']
+                # print dict2
+                # print dict2['url']
                 for item in dict2:
                     if item['python_version'] == 'source':
                         master_var = item['url']
@@ -598,9 +596,9 @@ def create_portfile(dict, file_name, dict2):
                    'port:py${python.version}-setuptools\n')
         deps = dependencies(dict['name'], dict['version'], True)
         if deps:
-            for i,dep in enumerate(deps):
+            for i, dep in enumerate(deps):
                 dep = dep.split('>')[0].split('=')[0]
-                dep = dep.replace('[','').replace(']','')
+                dep = dep.replace('[', '').replace(']', '')
                 deps[i] = dep
 #            print deps
             for dep in deps:
@@ -731,12 +729,10 @@ def main(argv):
         list_all()
         return
 
-
     if options.packages_search:
         for pkg_name in options.packages_search:
             search(pkg_name)
         return
-
 
     if options.packages_data:
         pkg_name = options.packages_data[0]
@@ -750,7 +746,6 @@ def main(argv):
             else:
                 print "No release found\n"
         return
-
 
     if options.package_fetch:
         pkg_name = options.package_fetch[0]
@@ -766,7 +761,6 @@ def main(argv):
                 print "No release found\n"
         return
 
-
     if options.package_portfile:
         pkg_name = options.package_portfile[0]
         if len(options.package_portfile) > 1:
@@ -780,7 +774,6 @@ def main(argv):
             else:
                 print "No release found\n"
         return
-
 
     if options.package_test:
         if len(options.package_test) > 0:
