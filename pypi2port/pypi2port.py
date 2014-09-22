@@ -11,14 +11,15 @@ __doc__ = """...Script for pypi2port module written for "The Macports Project"
 import argparse
 import sys
 import os
-import urllib2
 import hashlib
 import zipfile
 import progressbar as pb
 try:
     import xmlrpclib
+    from urllib2 import urlopen
 except ImportError:
     import xmlrpc.client as xmlrpclib
+    from urllib.request import urlopen
 import textwrap
 import string
 import shutil
@@ -77,7 +78,7 @@ def fetch(pkg_name, dict):
     url = dict['url']
     file_name = src_dir + '/' + dict['filename']
 
-    u = urllib2.urlopen(url)
+    u = urlopen(url)
     with open(file_name, 'wb') as f:
         meta = u.info()
         file_size = int(meta.getheaders("Content-Length")[0])
