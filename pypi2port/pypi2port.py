@@ -29,11 +29,13 @@ import requests
 
 client = xmlrpclib.ServerProxy('http://pypi.python.org/pypi')
 
+
 def list_all():
     """ Lists all packages available in pypi database """
     list_packages = client.list_packages()
     for package in list_packages:
         print package
+
 
 def search(pkg_name):
     """ Searches for a particular package by the name classifier """
@@ -41,6 +43,7 @@ def search(pkg_name):
     for value in values:
         for key in value.keys():
             print key, '-->', value[key]
+
 
 def release_data(pkg_name, pkg_version):
     """ Fetches the release data for a paticular package based on
@@ -55,6 +58,7 @@ def release_data(pkg_name, pkg_version):
             print "Please specify the exact package name."
         return
     return
+
 
 def fetch(pkg_name, dict):
     """ Fetches the distfile for a particular package name and release_url """
@@ -115,6 +119,7 @@ def fetch(pkg_name, dict):
             print "Error: %s - %s." % (e.filename, e.strerror)
         return False
 
+
 def fetch_url(pkg_name, pkg_version, checksum=False, deps=False):
     """ Checks for the checksums and dependecies for a particular python package
     on the basis of package_name and package_version """
@@ -127,6 +132,7 @@ def fetch_url(pkg_name, pkg_version, checksum=False, deps=False):
     else:
         for value in values:
             return fetch(pkg_name, value)
+
 
 def dependencies(pkg_name, pkg_version, deps=False):
     """ Finds dependencies for a particular package on the basis of
@@ -175,6 +181,7 @@ def dependencies(pkg_name, pkg_version, deps=False):
             pass
         return False
 
+
 def create_diff(old_file, new_file, diff_file):
     """ Creates a diff file for an existent port """
     with open(old_file) as f:
@@ -191,6 +198,7 @@ def create_diff(old_file, new_file, diff_file):
         except:
             pass
 
+
 def search_port(name):
     """ Searches for an existent port by its name """
     try:
@@ -201,6 +209,7 @@ def search_port(name):
         return existing_portfile
     except Exception:
         return False
+
 
 def checksums(pkg_name, pkg_version):
     """ Generates checksums for a package on the basis of the distfile fetched by
@@ -237,6 +246,7 @@ def checksums(pkg_name, pkg_version):
             print "Error\n"
             return
 
+
 def search_distfile(name, version):
     """ Searches if the distfile listed is present or not """
     try:
@@ -248,6 +258,7 @@ def search_distfile(name, version):
         print "No distfile found"
         print "Please set a DISTFILE env var before generating the portfile"
         sys.exit(0)
+
 
 def search_license(license):
     """ Maps the license passed to the already present list of
@@ -268,6 +279,7 @@ def search_license(license):
         match = re.search(patterns[i], license)
         if match:
             return licenses[i]
+
 
 def port_testing(name, portv='27'):
     """ Port Testing function for various phase implementations """
@@ -293,6 +305,7 @@ def port_testing(name, portv='27'):
             args = ['sudo', sys.executable] + sys.argv + [os.environ]
             os.execlpe('sudo', *args)
 
+
 def port_fetch(name, portv='27'):
     """ Fetch phase implementation """
     try:
@@ -303,6 +316,7 @@ def port_fetch(name, portv='27'):
         return True
     except:
         return False
+
 
 def port_checksum(name, portv='27'):
     """ Checksum phase implementation """
@@ -315,6 +329,7 @@ def port_checksum(name, portv='27'):
     except:
         return False
 
+
 def port_extract(name, portv='27'):
     """ Checksum phase implementation """
     try:
@@ -325,6 +340,7 @@ def port_extract(name, portv='27'):
         return True
     except:
         return False
+
 
 def port_patch(name, portv='27'):
     """ Patch phase implementation """
@@ -337,6 +353,7 @@ def port_patch(name, portv='27'):
     except:
         return False
 
+
 def port_configure(name, portv='27'):
     """ Configure phase implementation """
     try:
@@ -347,6 +364,7 @@ def port_configure(name, portv='27'):
         return True
     except:
         return False
+
 
 def port_build(name, portv='27'):
     """ Build phase implementation """
@@ -359,6 +377,7 @@ def port_build(name, portv='27'):
     except:
         return False
 
+
 def port_destroot(name, portv='27'):
     """ Destroot phase implementation """
     try:
@@ -370,6 +389,7 @@ def port_destroot(name, portv='27'):
     except:
         return False
 
+
 def port_clean(name, portv='27'):
     """ Clean phase implementation """
     try:
@@ -380,6 +400,7 @@ def port_clean(name, portv='27'):
         return True
     except:
         return False
+
 
 def create_portfile(dict, file_name, dict2):
     """ Creates a portfile on the basis of the release_data and release_url fetched
@@ -591,6 +612,7 @@ def create_portfile(dict, file_name, dict2):
     else:
         print "No port found."
 
+
 def print_portfile(pkg_name, pkg_version=None):
     """ Creates the directories and other commands necessary
     for a development environment """
@@ -626,6 +648,7 @@ def print_portfile(pkg_name, pkg_version=None):
     file_name = os.path.join(home_dir, "Portfile")
     create_portfile(dict, file_name, dict2)
     print "SUCCESS\n"
+
 
 def main(argv):
     """ Main function - Argument Parser """
